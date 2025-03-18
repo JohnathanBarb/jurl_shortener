@@ -4,12 +4,12 @@ from rest_framework import serializers
 from src.apps.url.models import Url
 
 class CreateUrlSerializer(serializers.ModelSerializer):
+    expires_at = serializers.DateTimeField(required=False)
+    token = serializers.CharField(read_only=True)
+
     class Meta:
         model = Url
-        fields = ["url", "expires_at"]
-        extra_kwargs = {
-            "expires_at": {"required": False}
-        }
+        fields = ["url", "expires_at", "token"]
 
     def __generate_token(self):
         return "".join(random.choices(string.ascii_letters + string.digits, k=5))
@@ -22,5 +22,3 @@ class CreateUrlSerializer(serializers.ModelSerializer):
                 break
 
         return Url.objects.create(token=token, **validated_data)
-
-# {"url": "https://www.google.com", "expires_at": "2025-03-18T10:00:00Z"}

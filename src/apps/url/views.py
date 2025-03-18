@@ -15,11 +15,7 @@ class CreateUrlView(APIView):
             serializer.save()
 
             return Response(
-                {
-                    "token": serializer.instance.token,
-                    "url": serializer.instance.url,
-                    "expire_at": serializer.instance.expires_at,
-                },
+                serializer.data,
                 status=status.HTTP_201_CREATED,
             )
 
